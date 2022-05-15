@@ -214,6 +214,27 @@ def create_app(test_config=None):
     one question at a time is displayed, the user is allowed to answer
     and shown whether they were correct or not.
     """
+    @app.route('/questions', methods=['POST'])
+    def get_quiz_questions():
+        body = request.get_json()
+        category = body.get('category', None)
+        prev_question_ids = body.get('prev_question_ids', '')
+        next_question = None
+
+        if category is None:
+            next_question = Question.query.filter(
+                Question.id not in prev_question_ids
+            ).one_or_none()
+        else:
+            next_question = Question.query.filter(
+                Question.category == category
+                and Question.id not in prev_question_ids
+            )
+
+        return jsonify({
+            'success': True,
+            'question': next_question
+        })
 
     """
     @DONE:

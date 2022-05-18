@@ -31,7 +31,7 @@ def create_app(test_config=None):
     Create an endpoint to handle GET requests
     for all available categories.
     """
-    @app.route('/categories', methods=['GET'])
+    @app.route('/api/categories', methods=['GET'])
     def get_categories():
         categories = Category.query.all()
 
@@ -66,7 +66,7 @@ def create_app(test_config=None):
 
         return questions[start:end]
 
-    @app.route('/questions', methods=['GET'])
+    @app.route('/api/questions', methods=['GET'])
     def get_questions():
         categories = Category.query.all()
         if len(categories) == 0:
@@ -97,7 +97,7 @@ def create_app(test_config=None):
     This removal will persist in the database and when you refresh the page.
     """
 
-    @app.route('/questions/<int:question_id>', methods=['DELETE'])
+    @app.route('/api/questions/<int:question_id>', methods=['DELETE'])
     def delete_question(question_id):
         try:
             question = Question.query.filter(Question.id == question_id).one_or_none()
@@ -129,7 +129,7 @@ def create_app(test_config=None):
     of the questions list in the "List" tab.
     """
 
-    @app.route('/questions', methods=['POST'])
+    @app.route('/api/questions', methods=['POST'])
     def create_question():
         body = request.get_json()
 
@@ -169,7 +169,7 @@ def create_app(test_config=None):
     Try using the word "title" to start.
     """
 
-    @app.route('/questions/search', methods=['POST'])
+    @app.route('/api/questions/search', methods=['POST'])
     def search_questions():
         body = request.get_json()
         search_term: str = body.get('searchTerm', None)
@@ -195,7 +195,7 @@ def create_app(test_config=None):
     category to be shown.
     """
 
-    @app.route('/categories/<int:category_id>/questions', methods=['GET'])
+    @app.route('/api/categories/<int:category_id>/questions', methods=['GET'])
     def get_category_questions(category_id):
         category = Category.query.filter(Category.id == category_id).one_or_none()
         if category is None:
@@ -224,7 +224,7 @@ def create_app(test_config=None):
     and shown whether they were correct or not.
     """
 
-    @app.route('/quizzes', methods=['POST'])
+    @app.route('/api/quizzes', methods=['POST'])
     def get_quiz_questions():
         body = request.get_json()
         previous_questions = body.get('previous_questions', None)

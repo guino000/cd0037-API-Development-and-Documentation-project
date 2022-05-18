@@ -22,7 +22,7 @@ class QuestionView extends Component {
 
   getQuestions = () => {
     $.ajax({
-      url: `/questions?page=${this.state.page}`, //DONE: update request URL
+      url: `/api/questions?page=${this.state.page}`, //DONE: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({
@@ -65,7 +65,7 @@ class QuestionView extends Component {
 
   getByCategory = (id) => {
     $.ajax({
-      url: `/categories/${id}/questions`, //DONE: update request URL
+      url: `/api/categories/${id}/questions`, //DONE: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({
@@ -84,7 +84,7 @@ class QuestionView extends Component {
 
   submitSearch = (searchTerm) => {
     $.ajax({
-      url: `/questions/search`, //DONE: update request URL
+      url: `/api/questions/search`, //DONE: update request URL
       type: 'POST',
       dataType: 'json',
       contentType: 'application/json',
@@ -112,7 +112,7 @@ class QuestionView extends Component {
     if (action === 'DELETE') {
       if (window.confirm('are you sure you want to delete the question?')) {
         $.ajax({
-          url: `/questions/${id}`, //DONE: update request URL
+          url: `/api/questions/${id}`, //DONE: update request URL
           type: 'DELETE',
           success: (result) => {
             this.getQuestions();
@@ -138,20 +138,20 @@ class QuestionView extends Component {
             Categories
           </h2>
           <ul>
-            {Object.entries(this.state.categories).map((category) => (
-              <li
-                key={category.id}
-                onClick={() => {
-                  this.getByCategory(category.id);
-                }}
-              >
-                {category.type}
-                <img
-                  className='category'
-                  alt={`${category.type?.toString().toLowerCase()}`}
-                  src={`${category.type?.toString().toLowerCase()}.svg`}
-                />
-              </li>
+            {Object.entries(this.state.categories).map((cat) => (
+                <li
+                    key={cat[1].id}
+                    onClick={() => {
+                      this.getByCategory(cat[1].id);
+                    }}
+                >
+                  {cat[1].type}
+                  <img
+                      className='category'
+                      alt={`${cat[1].type?.toLowerCase()}`}
+                      src={`${cat[1].type?.toLowerCase()}.svg`}
+                  />
+                </li>
             ))}
           </ul>
           <Search submitSearch={this.submitSearch} />

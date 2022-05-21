@@ -3,6 +3,7 @@ import '../stylesheets/App.css';
 import Question from './Question';
 import Search from './Search';
 import $ from 'jquery';
+import {RouteComponentProps} from "react-router-dom";
 
 class QuestionView extends Component {
   constructor() {
@@ -65,7 +66,7 @@ class QuestionView extends Component {
 
   getByCategory = (id) => {
     $.ajax({
-      url: `/api/categories/${id}/questions`, //DONE: update request URL
+      url: `/api/categories/${++id}/questions`, //DONE: update request URL
       type: 'GET',
       success: (result) => {
         this.setState({
@@ -138,18 +139,18 @@ class QuestionView extends Component {
             Categories
           </h2>
           <ul>
-            {Object.entries(this.state.categories).map((cat) => (
+            {Object.keys(this.state.categories).map((id) => (
                 <li
-                    key={cat[1].id}
+                    key={id}
                     onClick={() => {
-                      this.getByCategory(cat[1].id);
+                      this.getByCategory(id);
                     }}
                 >
-                  {cat[1].type}
+                  {this.state.categories[id].type}
                   <img
                       className='category'
-                      alt={`${cat[1].type?.toLowerCase()}`}
-                      src={`${cat[1].type?.toLowerCase()}.svg`}
+                      alt={`${this.state.categories[id].type?.toLowerCase()}`}
+                      src={`${this.state.categories[id].type?.toLowerCase()}.svg`}
                   />
                 </li>
             ))}
@@ -163,7 +164,7 @@ class QuestionView extends Component {
               key={q.id}
               question={q.question}
               answer={q.answer}
-              category={this.state.categories[q.category]}
+              category={this.state.categories[--q.category]}
               difficulty={q.difficulty}
               questionAction={this.questionAction(q.id)}
             />

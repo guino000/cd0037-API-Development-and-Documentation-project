@@ -120,6 +120,37 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue('total_questions' in data)
         self.assertTrue(data.get('total_questions', 0) > 0)
 
+    def test_question_create_delete(self):
+        res = self.client().post('/api/questions',
+                                 json={
+                                     'question': 'This is a test question',
+                                     'answer': 'Test',
+                                     'category': 1,
+                                     'difficulty': 1
+                                 })
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertTrue('success' in data)
+        self.assertTrue(data.get('success', False))
+        self.assertTrue('questions' in data)
+        self.assertTrue('total_questions' in data)
+        self.assertTrue('created' in data)
+        created_id = data.get('created')
+
+        res = self.client().delete(f'/api/questions/{created_id}')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertTrue('success' in data)
+        self.assertTrue(data.get('success', False))
+        self.assertTrue('total_questions' in data)
+        self.assertTrue('questions' in data)
+        self.assertTrue('deleted' in data)
+        deleted_id = data.get('deleted')
+        self.assertEqual(created_id, deleted_id)
+
+        res = self.client().delete(f'/api/questions/{created_id}')
+        self.assertEqual(res.status_code, 404)
+
 # Make the tests conveniently executable
 if __name__ == "__main__":
     unittest.main()

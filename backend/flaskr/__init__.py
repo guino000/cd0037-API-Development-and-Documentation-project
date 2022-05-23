@@ -93,7 +93,7 @@ def create_app(test_config=None):
     @DONE:
     Create an endpoint to DELETE question using a question ID.
 
-    @TODO: TEST: When you click the trash icon next to a question, the question will be removed.
+    @DONE: TEST: When you click the trash icon next to a question, the question will be removed.
     This removal will persist in the database and when you refresh the page.
     """
 
@@ -115,8 +115,8 @@ def create_app(test_config=None):
                 'total_questions': len(selection)
             })
 
-        except:
-            abort(422)
+        except Exception as e:
+            abort(404) if e.code == 404 else abort(422)
 
     """
     @DONE:
@@ -124,7 +124,7 @@ def create_app(test_config=None):
     which will require the question and answer text,
     category, and difficulty score.
 
-    @TODO: TEST: When you submit a question on the "Add" tab,
+    @DONE: TEST: When you submit a question on the "Add" tab,
     the form will clear and the question will appear at the end of the last page
     of the questions list in the "List" tab.
     """
